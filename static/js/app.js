@@ -2,10 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoPlayer = document.getElementById("background-video");
   const timeDisplay = document.getElementById("current-time");
 
-  console.log('App.js loaded successfully');
-  console.log('Video element found:', !!videoPlayer);
-  console.log('Time display found:', !!timeDisplay);
-
   if (!videoPlayer || !timeDisplay) {
     console.error('Required elements not found!');
     return;
@@ -29,13 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to get a new random video
   async function getRandomVideoPath() {
     try {
-      console.log('Fetching next video...');
       const response = await fetch("/next-video");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      console.log('Got next video:', data.videoPath);
       return data.videoPath;
     } catch (error) {
       console.error("Error fetching next video:", error);
@@ -52,8 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to switch to next video
   async function switchToNextVideo() {
     if (isTransitioning) return;
-    
-    console.log('Switching to next video...');
     isTransitioning = true;
     
     // Fade out current video
@@ -83,14 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
       
       try {
         await videoPlayer.play();
-        console.log('New video playing, fading in...');
-        
         // Small delay to ensure video is actually playing
         setTimeout(() => {
           videoPlayer.style.opacity = '1';
           isTransitioning = false;
           fadeOutStarted = false;
-          console.log('Fade in complete');
         }, 100);
         
       } catch (error) {
@@ -99,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isTransitioning = false;
         fadeOutStarted = false;
       }
-    }, 4000); // Wait for 4 second fade out
+    }, 1000);
   }
 
   // Monitor video time to start fade out in the last 5 seconds
@@ -108,37 +97,30 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const timeLeft = videoPlayer.duration - videoPlayer.currentTime;
     
-    // Start fade out 5 seconds before video ends
-    if (timeLeft <= 5 && timeLeft > 0) {
+    // Start fade out 1 second before video ends
+    if (timeLeft <= 1 && timeLeft > 0) {
       fadeOutStarted = true;
-      console.log('Starting fade out with', timeLeft.toFixed(2), 'seconds left');
       switchToNextVideo();
     }
   });
 
   // Backup: handle video ending in case timeupdate doesn't catch it
   videoPlayer.addEventListener("ended", () => {
-    console.log('Video ended event fired');
     if (!isTransitioning) {
       switchToNextVideo();
     }
   });
 
   // Initialize first video
-  console.log('Initializing first video...');
   videoPlayer.style.opacity = '0';
   
   // Wait for first video to be ready
   const initVideo = () => {
     videoPlayer.play().then(() => {
-      console.log('First video playing, fading in...');
       setTimeout(() => {
         videoPlayer.style.opacity = '1';
-        console.log('Initial fade in complete');
       }, 100);
     }).catch((e) => {
-      console.warn("Autoplay was prevented:", e);
-      // Still fade in even if autoplay fails
       videoPlayer.style.opacity = '1';
     });
   };
