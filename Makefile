@@ -11,7 +11,7 @@ all: build
 
 # Build for current platform
 build:
-	go build -o $(BINARY_NAME).exe
+	go build -o $(BINARY_NAME)
 
 # Build for Linux (server deployment)
 build-linux:
