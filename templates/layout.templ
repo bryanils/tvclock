@@ -1,0 +1,51 @@
+package templates
+
+templ Layout(content templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Go Clock App</title>
+			// Tailwind CSS CDN for quick setup. For production, compile your own.
+			<script src="https://cdn.tailwindcss.com"></script>
+			<script>
+				tailwind.config = {
+					theme: {
+						extend: {
+							fontSize: {
+								'10xl': '10rem',
+								'11xl': '12rem',
+								'12xl': '14rem',
+							}
+						}
+					}
+				}
+			</script>
+			// Custom CSS for video positioning and transitions
+			<style>
+				.video-fit {
+					object-fit: cover;
+				}
+				
+				/* Smooth video fade transition */
+				#background-video {
+					transition: opacity 1s ease-in-out;
+					opacity: 1;
+				}
+				
+				#background-video.fade-out {
+					opacity: 0;
+				}
+				
+				#background-video.fade-in {
+					opacity: 1;
+				}
+			</style>
+		</head>
+		<body class="bg-black text-white">
+			@content
+			<script src="/static/js/app.js"></script>
+		</body>
+	</html>
+}
