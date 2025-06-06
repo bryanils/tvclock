@@ -8,7 +8,6 @@ import (
 	"math/rand"
 	"net/http"
 	"path/filepath"
-	"time"
 
 	"github.com/bryanils/tvclock/templates"
 )
@@ -23,9 +22,6 @@ var videoPaths []string
 var lastVideoIndex = -1
 
 func init() {
-	// Initialize random seed
-	rand.Seed(time.Now().UnixNano())
-
 	// Discover video files at startup
 	err := filepath.WalkDir("vids", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -106,7 +102,7 @@ func main() {
 		lastVideoIndex = randomIndex
 		nextVideo := videoPaths[randomIndex]
 
-		log.Printf("Serving next video: %s (index %d)", nextVideo, randomIndex)
+		//log.Printf("Serving next video: %s (index %d)", nextVideo, randomIndex)
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"videoPath": nextVideo})
